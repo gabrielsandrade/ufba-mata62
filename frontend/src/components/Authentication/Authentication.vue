@@ -1,13 +1,8 @@
 <template>
-  <div class="auth d-flex justify-end">
-    <div class="auth-content">
-      <v-tabs fixed-tabs v-model="tab">
-        <v-tab>Login</v-tab>
-        <v-tab>Sign Up</v-tab>
-      </v-tabs>
+  <div class="auth d-flex justify-center align-center">
+    <div class="auth-content d-flex justify-center align-center">
       <div>
         <Login v-if="tab == 0" />
-        <SignUp v-else />
       </div>
     </div>
   </div>
@@ -15,7 +10,6 @@
 
 <script>
 import Login from "./Login/Login";
-import SignUp from "./SignUp/SignUp";
 export default {
   name: "Authentication",
   data: () => {
@@ -25,7 +19,6 @@ export default {
   },
   components: {
     Login,
-    SignUp,
   },
 };
 </script>
@@ -34,10 +27,5 @@ export default {
 .auth {
   width: 100vw;
   height: 100vh;
-
-  .auth-content {
-    width: 500px;
-    height: 100vh;
-  }
 }
 </style>

@@ -1,20 +1,16 @@
 <template>
   <v-app>
     <v-main>
-      <Authentication />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Authentication from "./components/Authentication/Authentication";
-
 export default {
   name: "App",
 
-  components: {
-    Authentication,
-  },
+  components: {},
 
   data: () => ({
     //
@@ -23,8 +19,6 @@ export default {
 </script>
 <style scoped>
 #app {
-  background-image: url("../public/wpp-login.jpeg");
-  background-repeat: no-repeat;
-  background-size: 100vw 100vh;
+  background-color: #EEEEEE;
 }
 </style>
