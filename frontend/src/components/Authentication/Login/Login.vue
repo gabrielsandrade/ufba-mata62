@@ -26,6 +26,7 @@
           class="inputField"
         ></v-text-field>
       </div>
+      <p class="error--text" v-if="errorLogin">Usuário ou senha inválidos</p>
       <div class="d-flex justify-space-between flex-column align-center mt-8">
         <v-btn
           color="success mb-2"
@@ -46,6 +47,7 @@ export default {
   name: "Login",
   components: {},
   data: () => ({
+    errorLogin: null,
     user: "",
     showPassword: true,
     password: "",
@@ -57,15 +59,16 @@ export default {
   },
   methods: {
     handleSubmit(evt) {
-      console.log(evt);
       let data = {
         user: evt.target[0].value,
         senha: evt.target[1].value,
       };
-      Api.post("login", data).then((response) => {
-        console.log(response);
-        this.$router.push("teste");
-      });
+      Api.post("login", data)
+        .then(() => {
+          localStorage.name = this.user;
+          this.$router.push("teste");
+        })
+        .catch(() => (this.errorLogin = true));
     },
   },
 };

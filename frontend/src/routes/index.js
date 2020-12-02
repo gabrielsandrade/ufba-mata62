@@ -5,6 +5,7 @@ import HelloWorld from "@/components/HelloWorld";
 
 Vue.use(Router);
 const router = new Router({
+  mode: "history",
   routes: [
     { path: "/", name: "home", component: Authentication },
     { path: "/teste", name: "hello", component: HelloWorld },
