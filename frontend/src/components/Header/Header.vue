@@ -1,11 +1,15 @@
 <template>
   <div class="header">
-    <v-toolbar color="dark light--text">
+    <v-toolbar class="pa-0" color="dark light--text">
       <img src="../../assets/logo-transparent.png" height="60px" />
       <v-spacer></v-spacer>
-      <v-btn class="mr-4 white--text" color="grey darken" @click="logOut"
-        >Sair</v-btn
-      >
+      <v-toolbar-items class="">
+        <v-btn>Instituições</v-btn>
+        <v-btn>Cursos</v-btn>
+        <v-btn>Usuários</v-btn>
+      <v-btn class="white--text" color="grey darken" @click="logOut"
+        >Sair</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
   </div>
 </template>
@@ -22,7 +26,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.v-toolbar__content {
+      padding: 0px !important;
+    }
 .header {
   width: 100vw;
 }

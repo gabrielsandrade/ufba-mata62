@@ -1,22 +1,73 @@
 <template>
   <div class="main">
     <Header />
-    <p v-if="logged">Login realizado</p>
-    <p v-else>Não está logado</p>
+    <p class="info--text text-center my-4">Bem vindo(a) {{ user }}</p>
+    <div class="list-cursos mx-2 px-8">
+      <DataTable :items="faculdades" :headers="headers" />
+    </div>
   </div>
 </template>
 
 <script>
 import Api from "../services/api.js";
 import Header from "./Header/Header";
+import DataTable from "./DataTable/DataTable";
 export default {
   name: "HelloWorld",
   components: {
     Header,
+    DataTable,
   },
   data: () => {
     return {
+      user: localStorage.name.toUpperCase(),
       logged: null,
+      headers: [
+        { text: "Faculdade", value: "name" },
+        { text: "Cursos", value: "cursos" },
+      ],
+      faculdades: [
+        {
+          name: "FTC",
+          cursos: 37,
+        },
+        {
+          name: "Faculdade Ruy Barbosa",
+          cursos: 40,
+        },
+        {
+          name: "UNIJORGE",
+          cursos: 54,
+        },
+        {
+          name: "Faculdade 2 de Julho",
+          cursos: 70,
+        },
+        {
+          name: "UNIME",
+          cursos: 62,
+        },
+        {
+          name: "Faculdade Ruy Barbosa",
+          cursos: 40,
+        },
+        {
+          name: "FTC",
+          cursos: 37,
+        },
+        {
+          name: "Faculdade Ruy Barbosa",
+          cursos: 40,
+        },
+        {
+          name: "FTC",
+          cursos: 37,
+        },
+        {
+          name: "Faculdade Ruy Barbosa",
+          cursos: 40,
+        },
+      ],
     };
   },
 
@@ -40,6 +91,8 @@ export default {
 .main {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  .list-cursos {
+    
+  }
 }
 </style>

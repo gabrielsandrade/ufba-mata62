@@ -1,8 +1,8 @@
 <template>
   <v-card
     class="form-card d-flex justify-center fill-height"
-    elevation="0"
-    flat
+    elevation="4"
+    text
   >
     <v-form class="form mt-8" @submit.prevent="handleSubmit">
       <div class="">
@@ -35,7 +35,7 @@
           width="200px"
           >LOGIN</v-btn
         >
-        <router-link to="/teste"> Esqueceu a senha ?</router-link>
+        <router-link to="/ufba"> Esqueceu a senha ?</router-link>
       </div>
     </v-form>
   </v-card>
@@ -66,7 +66,7 @@ export default {
       Api.post("login", data)
         .then(() => {
           localStorage.name = this.user;
-          this.$router.push("teste");
+          this.$router.push("ufba");
         })
         .catch(() => (this.errorLogin = true));
     },

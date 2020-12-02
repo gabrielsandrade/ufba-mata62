@@ -17,8 +17,11 @@ export default {
   }),
 };
 </script>
-<style scoped>
+<style>
+html {
+  overflow-y: hidden !important;
+}
 #app {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 </style>
