@@ -1,6 +1,8 @@
 <template>
   <div class="main">
-    <p class="info--text text-center my-4">Bem vindo(a) {{ user }}</p>
+    <p class="info--text text-center my-4">
+      {{ user }} você está na tela de cursos
+    </p>
     <div class="list-cursos mx-2 px-8">
       <DataTable :items="faculdades" :headers="headers" />
     </div>
@@ -8,8 +10,8 @@
 </template>
 
 <script>
-import Api from "../services/api.js";
-import DataTable from "./DataTable/DataTable";
+// import Api from "../services/api.js";
+import DataTable from "../DataTable/DataTable";
 export default {
   name: "HelloWorld",
   components: {
@@ -20,69 +22,67 @@ export default {
       user: localStorage.name.toUpperCase(),
       logged: null,
       headers: [
-        { text: "Faculdade", value: "name" },
-        { text: "Cursos", value: "cursos" },
-        { text: "Ações", value: "actions" },
+        { text: "Curso", value: "name" },
+        { text: "Alunos", value: "cursos" },
+        { text: "Código", value: "codigo" },
+        { text: 'Ações', value: 'actions', sortable: false },
       ],
       faculdades: [
         {
-          name: "FTC",
+          name: "Engenharia Elétrica",
           cursos: 37,
+          codigo: "XXXXX",
         },
         {
-          name: "Faculdade Ruy Barbosa",
+          name: "Engenharia Civil",
           cursos: 40,
+          codigo: "XXXXX",
         },
         {
           name: "UNIJORGE",
           cursos: 54,
+          codigo: "XXXXX",
         },
         {
           name: "Faculdade 2 de Julho",
           cursos: 70,
+          codigo: "XXXXX",
         },
         {
           name: "UNIME",
           cursos: 62,
+          codigo: "XXXXX",
         },
         {
           name: "UNIRB",
           cursos: 79,
+          codigo: "XXXXX",
         },
         {
           name: "UNIFACS",
           cursos: 56,
+          codigo: "XXXXX",
         },
         {
           name: "UCSAL",
           cursos: 43,
+          codigo: "XXXXX",
         },
         {
           name: "UNIESQUINA",
           cursos: 92,
+          codigo: "XXXXX",
         },
         {
           name: "Faculdade outra da Devry",
           cursos: 25,
+          codigo: "XXXXX",
         },
       ],
     };
   },
 
-  created() {
-    console.log(localStorage);
-    let data = {
-      withCredentials: true,
-    };
-    Api.get("/teste", data)
-      .then(() => {
-        this.logged = true;
-      })
-      .catch(() => {
-        this.$router.push("/");
-        this.logged = false;
-      });
-  },
+  created() {},
 };
 </script>
 <style lang="scss" scoped>

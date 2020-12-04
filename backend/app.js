@@ -3,25 +3,9 @@ const routes = require("./routes");
 const cors = require("cors");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const redis = require("redis");
-const redisStore = require("connect-redis")(session);
-const client = redis.createClient();
 const port = 3000;
 const app = express();
 
-// app.use(
-//   session({
-//     secret: "secret-key",
-//     store: new redisStore({
-//       host: "localhost",
-//       port: 6379,
-//       client: client,
-//       ttl: 260,
-//     }),
-//     saveUninitialized: false,
-//     resave: false,
-//   })
-// );
 
 app.use(
   session({

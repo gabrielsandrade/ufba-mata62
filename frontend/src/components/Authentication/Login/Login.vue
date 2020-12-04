@@ -35,7 +35,7 @@
           width="200px"
           >LOGIN</v-btn
         >
-        <router-link to="/ufba"> Esqueceu a senha ?</router-link>
+        <router-link to="/home"> Esqueceu a senha ?</router-link>
       </div>
     </v-form>
   </v-card>
@@ -46,6 +46,10 @@ import Api from "../../../services/api.js";
 export default {
   name: "Login",
   components: {},
+  created() {
+    if (localStorage.name != null)
+          this.$router.push("home");
+  },
   data: () => ({
     errorLogin: null,
     user: "",
@@ -66,7 +70,7 @@ export default {
       Api.post("login", data)
         .then(() => {
           localStorage.name = this.user;
-          this.$router.push("ufba");
+          this.$router.push("home");
         })
         .catch(() => (this.errorLogin = true));
     },
