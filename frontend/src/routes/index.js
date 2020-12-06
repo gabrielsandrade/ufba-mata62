@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Authentication from "@/components/Authentication/Authentication";
 import HelloWorld from "@/components/HelloWorld";
+import Funcionarios from "@/components/Funcionarios/Funcionarios";
 import Header from "@/components/Header/Header";
 import Cursos from "@/components/Cursos/Cursos";
 import Home from "@/components/Home/Home";
@@ -30,7 +31,7 @@ const router = new Router({
         },
         {
           path: 'usuarios',
-          component: HelloWorld,
+          component: Funcionarios,
         },
       ],
     },

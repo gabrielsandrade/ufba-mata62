@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import Api from "../services/api.js";
-import DataTable from "./DataTable/DataTable";
+import Api from "../../services/api.js";
+import DataTable from "../DataTable/DataTable";
 export default {
   name: "HelloWorld",
   components: {
@@ -70,16 +70,16 @@ export default {
   },
 
   created() {
-    console.log(localStorage);
-    let data = {
-      withCredentials: true,
-    };
-    Api.get("/teste", data)
-      .then(() => {
-        this.logged = true;
+    Api.get("/user")
+      .then((response) => {
+          console.log(response.data.data);
+          response.forEach(usuario => {
+              console.log(usuario);
+          });
       })
-      .catch(() => {
-        this.$router.push("/");
+      .catch((err) => {
+          console.log(err);
+        // this.$router.push("/");
         this.logged = false;
       });
   },

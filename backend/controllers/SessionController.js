@@ -1,5 +1,17 @@
-const connection = require("../database/connection");
+const {
+  sequelize,
+  Usuario,
+  Funcionario,
+  Instituicao,
+  Curso,
+  Gestao,
+} = require("../database/connection");
 const moment = require("moment");
+const crypto = require("crypto");
+
+function criptografaSenha(senha) {
+  return crypto.createHash("md5").update(senha).digest("hex");
+}
 
 function getTimeNow() {
   return moment().format("hh:mm:ss, DD/MM/YYYY");
@@ -11,32 +23,50 @@ module.exports = {
   },
 
   login(request, response) {
+    // usuario, permissão e a faculdade que ele pertence
     let date = getTimeNow();
+    let usuario = request.body.user;
+    console.log(usuario);
     let senha = request.body.senha;
-    let user = request.body.user;
-    connection.query(
-      "SELECT * FROM users where users_user = '" + user + "' LIMIT 1",
-      function (err, row) {
-        if (!!err) {
-          console.log("ERRO DE CONEXÃO COM O BANCO DE DADOS");
-          console.log(err);
-          return response.status(400).json({
-            error: err,
+    let senhaCryp = criptografaSenha(senha);
+
+    Usuario.findOne({
+      where: {
+        usuario: usuario,
+      },
+    }).then((user) => {
+      if (!user)
+        return response
+          .status(401)
+          .json({ error: "Usuário ou senha inválidos" });
+      if (senhaCryp == user.senha) {
+        Funcionario.findOne({
+          where: {
+            id_funcionario: user.id_usuario,
+          },
+        })
+          .then((funcionario) => {
+            console.log(`${usuario} fez login às ${date}`);
+            Instituicao.findOne({
+              where: {
+                id_instituicao: funcionario.id_instituicao,
+              },
+            }).then((instituicao) => {
+              request.session.id_instituicao = funcionario.id_instituicao;
+              request.session.usuario = usuario;
+              return response.json({
+                usuario: usuario,
+                id_instituicao: instituicao.id_instituicao,
+                loginTime: date,
+                validadora: instituicao.eh_validadora,
+              });
+            });
+          })
+          .catch((err) => {
+            return response.status(401).json({ error: err });
           });
-        }
-        if (row.length && row[0].users_senha == senha) {
-          request.session.user = user;
-          console.log(`${user} fez login às ${date}`);
-          return response.json({
-            user: user,
-            loginTime: date,
-          });
-        }
-        return response.status(401).json({
-          error: "Login ou senha inválidos",
-        });
       }
-    );
+    });
   },
 
   logout(request, response) {

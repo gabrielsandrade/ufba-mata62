@@ -1,26 +1,40 @@
 <template>
   <div class="header">
-    <v-toolbar class="pa-0" color="dark light--text">
-      <router-link
-        to="/"
-        height="40px"
-        tag="img"
-        v-bind:src="'/src/assets/logo-transparent.png'"
-      >
-      </router-link>
-      <v-spacer></v-spacer>
-      <v-toolbar-items class="">
-        <v-btn exact to="/home/instituicoes" v-if="validadora"
-          >Instituições</v-btn
-        >
-        <v-btn exact to="/home/cursos" v-if="!validadora">Cursos</v-btn>
-        <v-btn exact to="/home/usuarios">Usuários</v-btn>
-        <v-btn class="white--text" color="grey darken" @click="logOut"
-          >Sair</v-btn
-        >
-      </v-toolbar-items>
-    </v-toolbar>
-    <router-view></router-view>
+    <v-card class="align-center pa-0 fill-height elevation-0" color="light--text" height="100%">
+      <v-app-bar dark>
+        <v-app-bar-nav-icon
+          @click="drawer = true"
+        ></v-app-bar-nav-icon>
+        <v-spacer></v-spacer>
+        <v-icon class="mr-2" @click="logOut">mdi-exit-to-app</v-icon>
+      </v-app-bar>
+      <v-navigation-drawer v-model="drawer" absolute temporary>
+        <v-list-item>
+          <v-list-item-avatar class="secondary">
+              <v-icon dark>mdi-account</v-icon>
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ user }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list class=""
+          ><v-list-item exact to="/home">Página Inicial</v-list-item>
+          <v-list-item exact to="/home/instituicoes" v-if="validadora"
+            >Instituições</v-list-item
+          >
+          <v-list-item exact to="/home/cursos" v-if="!validadora"
+            >Cursos</v-list-item
+          >
+          <v-list-item exact to="/home/usuarios">Usuários</v-list-item>
+          <v-list-item class="white--text" color="grey darken" @click="logOut"
+            >Sair</v-list-item
+          >
+        </v-list>
+      </v-navigation-drawer>
+      <router-view></router-view>
+    </v-card>
   </div>
 </template>
 
@@ -28,6 +42,17 @@
 import Api from "../../services/api";
 export default {
   name: "Header",
+  data: () => {
+    return {
+      drawer: false,
+      user: null,
+    };
+  },
+  created() {
+    this.user =
+      localStorage.nome.charAt(0).toUpperCase() +
+      localStorage.nome.substring(1);
+  },
   methods: {
     logOut() {
       Api.post("/logout").then(() => {
@@ -38,18 +63,19 @@ export default {
   },
   computed: {
     validadora: function() {
-      console.log(localStorage.name);
-      return localStorage.name == "carol";
+      console.log(localStorage.nome);
+      return localStorage.nome == "carol";
     },
   },
 };
 </script>
 
 <style lang="scss">
-.v-toolbar__content {
-  padding: 0px !important;
-}
+
 .header {
   width: 100vw;
 }
+// .avatar {
+//   background-color: #000;
+// }
 </style>

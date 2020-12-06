@@ -2,7 +2,6 @@ const express = require("express");
 const routes = require("./routes");
 const cors = require("cors");
 const session = require("express-session");
-const bodyParser = require("body-parser");
 const port = 3000;
 const app = express();
 
@@ -20,8 +19,6 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();});
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({origin: 'http://localhost:8080'}));
 app.use(express.json());
 app.use(routes);

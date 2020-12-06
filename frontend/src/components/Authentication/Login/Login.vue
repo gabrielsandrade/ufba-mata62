@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="form-card d-flex justify-center fill-height"
+    class="form-card d-flex justify-center"
     elevation="4"
     text
   >
@@ -26,7 +26,7 @@
           class="inputField"
         ></v-text-field>
       </div>
-      <p class="error--text" v-if="errorLogin">Usuário ou senha inválidos</p>
+      <p class="error--text" v-if="errorLogin">Sua instituição ainda possui cadastro pendente</p>
       <div class="d-flex justify-space-between flex-column align-center mt-8">
         <v-btn
           color="success mb-2"
@@ -47,7 +47,7 @@ export default {
   name: "Login",
   components: {},
   created() {
-    if (localStorage.name != null)
+    if (localStorage.nome != null)
           this.$router.push("home");
   },
   data: () => ({
@@ -68,8 +68,9 @@ export default {
         senha: evt.target[1].value,
       };
       Api.post("login", data)
-        .then(() => {
-          localStorage.name = this.user;
+        .then((response) => {
+          localStorage.nome = this.user;
+          localStorage.id_instituicao = response.id_instituicao;
           this.$router.push("home");
         })
         .catch(() => (this.errorLogin = true));
@@ -81,7 +82,7 @@ export default {
 <style lang="scss" scoped>
 .form-card {
   width: 500px;
-  height: 100vh;
+  height: calc(100vh - 48px);
   border-top-left-radius: 0%;
 }
 
