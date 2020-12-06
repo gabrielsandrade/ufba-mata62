@@ -19,13 +19,14 @@ export default {
   },
   data: () => {
     return {
-      user: localStorage.nome.toUpperCase(),
+      user:
+        localStorage.nome,
       logged: null,
       headers: [
         { text: "Curso", value: "name" },
         { text: "Alunos", value: "cursos" },
         { text: "Código", value: "codigo" },
-        { text: 'Ações', value: 'actions', sortable: false },
+        { text: "Ações", value: "actions", sortable: false },
       ],
       faculdades: [
         {

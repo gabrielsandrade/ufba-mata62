@@ -2,7 +2,7 @@
   <div class="main">
     <p class="info--text text-center my-4">Bem vindo(a) {{ user }}</p>
     <div class="list-cursos mx-2 px-8">
-      <DataTable :items="faculdades" :headers="headers" />
+      <DataTable :items="funcionarios" :headers="_headers" />
     </div>
   </div>
 </template>
@@ -20,68 +20,45 @@ export default {
       user: localStorage.nome.toUpperCase(),
       logged: null,
       headers: [
-        { text: "Faculdade", value: "name" },
-        { text: "Cursos", value: "cursos" },
-        { text: "Ações", value: "actions" },
+        { text: "Nome", value: "nome", show: true },
+        { text: "Sobrenome", value: "sobrenome", show: true },
+        { text: "Telefone", value: "telefone", show: true },
+        { text: "CPF", value: "cpf", show: true },
+        { text: "Email", value: "email", show: true },
+        { text: "Cargo", value: "cargo", show: true },
+        { text: "Ações", value: "actions", show: true },
       ],
-      faculdades: [
-        {
-          name: "FTC",
-          cursos: 37,
-        },
-        {
-          name: "Faculdade Ruy Barbosa",
-          cursos: 40,
-        },
-        {
-          name: "UNIJORGE",
-          cursos: 54,
-        },
-        {
-          name: "Faculdade 2 de Julho",
-          cursos: 70,
-        },
-        {
-          name: "UNIME",
-          cursos: 62,
-        },
-        {
-          name: "UNIRB",
-          cursos: 79,
-        },
-        {
-          name: "UNIFACS",
-          cursos: 56,
-        },
-        {
-          name: "UCSAL",
-          cursos: 43,
-        },
-        {
-          name: "UNIESQUINA",
-          cursos: 92,
-        },
-        {
-          name: "Faculdade outra da Devry",
-          cursos: 25,
-        },
-      ],
+      funcionarios: [],
     };
   },
 
   created() {
     Api.get("/user")
       .then((response) => {
-          console.log(response.data.data);
-          response.forEach(usuario => {
-              console.log(usuario);
-          });
+        console.log(response.data.data);
+        response.data.data.forEach((usuario) => {
+          let funcionario = {
+            nome: usuario.nome_funcionario,
+            sobrenome: usuario.sobrenome,
+            telefone: usuario.telefone_funcionario,
+            cpf: usuario.cpf,
+            email: usuario.email_funcionario,
+            cargo: usuario.cargo,
+          };
+          this.funcionarios.push(funcionario);
+        });
       })
       .catch((err) => {
-          console.log(err);
+        console.log(err);
         // this.$router.push("/");
         this.logged = false;
       });
+    console.log(this.funcionarios);
+  },
+  computed: {
+    _headers() {
+      return this.headers.filter((h) => h.show);
+    },
   },
 };
 </script>

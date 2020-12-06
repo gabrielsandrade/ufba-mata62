@@ -91,4 +91,18 @@ module.exports = {
           .json({ error: "Instituição já cadastrada" });
       });
   },
+  checkName(request, response) {
+    let params = request.body;
+    return Instituicao.findOne({
+      where: {
+        nome_instituicao: params.nome_instituicao,
+      },
+    })
+      .then((result) => {
+        if (result)
+          return response.status(400).json({ data: "Nome já está em uso" });
+        else return response.json({ data: "Nome válido" });
+      })
+      .catch((err) => response.json({ error: err }));
+  },
 };

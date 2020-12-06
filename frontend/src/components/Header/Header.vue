@@ -1,17 +1,19 @@
 <template>
   <div class="header">
-    <v-card class="align-center pa-0 fill-height elevation-0" color="light--text" height="100%">
+    <v-card
+      class="align-center pa-0 fill-height elevation-0"
+      color="light--text"
+      height="100%"
+    >
       <v-app-bar dark>
-        <v-app-bar-nav-icon
-          @click="drawer = true"
-        ></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-icon class="mr-2" @click="logOut">mdi-exit-to-app</v-icon>
       </v-app-bar>
       <v-navigation-drawer v-model="drawer" absolute temporary>
         <v-list-item>
           <v-list-item-avatar class="secondary">
-              <v-icon dark>mdi-account</v-icon>
+            <v-icon dark>mdi-account</v-icon>
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -49,9 +51,17 @@ export default {
     };
   },
   created() {
+    console.log(localStorage);
     this.user =
       localStorage.nome.charAt(0).toUpperCase() +
       localStorage.nome.substring(1);
+  },
+  watch: {
+    localStorage() {
+      this.user =
+        localStorage.nome.charAt(0).toUpperCase() +
+        localStorage.nome.substring(1);
+    },
   },
   methods: {
     logOut() {
@@ -71,7 +81,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .header {
   width: 100vw;
 }

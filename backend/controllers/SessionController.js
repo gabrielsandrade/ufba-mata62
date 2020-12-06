@@ -54,8 +54,10 @@ module.exports = {
             }).then((instituicao) => {
               request.session.id_instituicao = funcionario.id_instituicao;
               request.session.usuario = usuario;
+              console.log(funcionario);
               return response.json({
                 usuario: usuario,
+                nome_usuario: funcionario.nome_funcionario,
                 id_instituicao: instituicao.id_instituicao,
                 loginTime: date,
                 validadora: instituicao.eh_validadora,
@@ -65,7 +67,10 @@ module.exports = {
           .catch((err) => {
             return response.status(401).json({ error: err });
           });
-      }
+      } else
+        return response
+          .status(401)
+          .json({ error: "Usuário ou senha inválidos" });
     });
   },
 

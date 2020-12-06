@@ -26,6 +26,7 @@ routes.post("/login", SessionController.login);
 routes.post("/logout", SessionController.logout);
 
 routes.post("/instituicao/inicial", CollegeController.cadastroInicial);
+routes.post("/instituicao/check", CollegeController.checkName);
 
 // routes.get("/instituicao", CollegeController.get);
 // routes.post("/instituicao", CollegeController.create);
