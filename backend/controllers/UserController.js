@@ -95,6 +95,11 @@ module.exports = {
       return module.exports.createFuncionario(params, response);
     });
   },
+
+  createUser(request, response) {
+    return module.exports.createLogin(request.body, response);
+  },
+
   deleteFuncionarios(request, response) {
     Usuario.destroy({ truncate: true });
     Funcionario.destroy({ truncate: true });

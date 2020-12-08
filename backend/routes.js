@@ -28,12 +28,12 @@ routes.post("/logout", SessionController.logout);
 routes.post("/instituicao/inicial", CollegeController.cadastroInicial);
 routes.post("/instituicao/check", CollegeController.checkName);
 
-// routes.get("/instituicao", CollegeController.get);
-// routes.post("/instituicao", CollegeController.create);
+routes.get("/instituicao", CollegeController.get);
+routes.post("/instituicao", CollegeController.cadastro);
 
 routes.get("/user", UserController.getFuncionarios);
 routes.delete("/user", UserController.deleteFuncionarios);
-routes.post("/user", UserController.createLogin);
+routes.post("/user", UserController.createUser);
 
 // routes.get("/teste", (req, res) => {
 //   let query = "SHOW COLUMNS FROM funcionarios";
@@ -43,13 +43,6 @@ routes.post("/user", UserController.createLogin);
 //   });
 // });
 routes.post("/teste", (req, resp) => {
-  Instituicao.findOne({
-    where: {
-      nome_instituicao: "UFBA",
-    },
-  }).then((user) => {
-    console.log(user);
-    return resp.json({ data: user });
-  });
+  return resp.json({ data: req.session });
 });
 module.exports = routes;

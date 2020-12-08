@@ -15,32 +15,55 @@ function getTimeNow() {
 
 module.exports = {
   get(request, response) {
-    let query = "SELECT * FROM instituicao";
-    connection.query(query, function (err, row, field) {
-      if (err) throw err;
-      console.log(row);
-      response.json(row);
+    return Instituicao.findAll().then((result) => {
+      console.log(result);
+      return response.json({ data: result });
     });
-    return false;
   },
 
   create(instituicao, response) {
-    let validadora = instituicao.validadora;
-    let nome_instituicao = instituicao.nome_instituicao;
-    let rua = instituicao.rua;
-    let numero = instituicao.numero;
-    let bairro = instituicao.bairro;
-    let cep = instituicao.cep;
-    let cidade = instituicao.cidade;
-    let estado = instituicao.estado;
-    let credenciamento = instituicao.credenciamento;
-    let mantenedora = instituicao.mantenedora;
+    let validadora = instituicao.eh_validadora
+      ? instituicao.eh_validadora
+      : null;
+    let nome_instituicao = instituicao.nome_instituicao
+      ? instituicao.nome_instituicao
+      : null;
+    let rua = instituicao.rua ? instituicao.rua : null;
+    let numero = instituicao.numero ? instituicao.numero : null;
+    let bairro = instituicao.bairro ? instituicao.bairro : null;
+    let cep = instituicao.cep ? instituicao.cep : null;
+    let cidade = instituicao.cidade ? instituicao.cidade : null;
+    let estado = instituicao.estado ? instituicao.estado : null;
+    let credenciamento = instituicao.credenciamento
+      ? instituicao.credenciamento
+      : null;
+    let mantenedora_nome = instituicao.mantenedora_nome
+      ? instituicao.mantenedora_nome
+      : null;
+    let mantenedora_cnpj = instituicao.mantenedora_cnpj
+      ? instituicao.mantenedora_cnpj
+      : null;
+    let status = instituicao.status ? instituicao.status : null;
+    console.log(
+      validadora,
+      nome_instituicao,
+      rua,
+      numero,
+      bairro,
+      cep,
+      cidade,
+      estado,
+      credenciamento,
+      mantenedora_nome,
+      mantenedora_cnpj,
+      status
+    );
     return Instituicao.findOrCreate({
       where: {
         nome_instituicao: nome_instituicao,
       },
       defaults: {
-        validadora: validadora,
+        eh_validadora: validadora,
         nome_instituicao: nome_instituicao,
         rua: rua,
         numero: numero,
@@ -49,7 +72,9 @@ module.exports = {
         cidade: cidade,
         estado: estado,
         credenciamento: credenciamento,
-        mantenedora: mantenedora,
+        mantenedora_nome: mantenedora_nome,
+        mantenedora_cnpj: mantenedora_cnpj,
+        status: status,
       },
     }).then(function (result) {
       let inst = result[0],
@@ -91,6 +116,14 @@ module.exports = {
           .json({ error: "Instituição já cadastrada" });
       });
   },
+
+  cadastro(request, response) {
+    console.log(request.body);
+    return module.exports
+      .create(request.body, response)
+      .then((result) => console.log(result));
+  },
+
   checkName(request, response) {
     let params = request.body;
     return Instituicao.findOne({
