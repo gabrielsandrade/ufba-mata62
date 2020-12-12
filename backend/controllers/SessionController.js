@@ -59,8 +59,9 @@ module.exports = {
                 usuario: usuario,
                 nome_usuario: funcionario.nome_funcionario,
                 id_instituicao: instituicao.id_instituicao,
-                loginTime: date,
+                login_time: date,
                 validadora: instituicao.eh_validadora,
+                cargo: funcionario.cargo,
               });
             });
           })

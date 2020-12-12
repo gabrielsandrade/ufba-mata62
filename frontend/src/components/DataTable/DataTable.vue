@@ -5,6 +5,7 @@
     fixed-header
     :items="items"
     :headers="headers"
+    :loading="loading"
   >
     <!-- <template slot="items" slot-scope="props">
       <tr>
@@ -26,30 +27,18 @@
 <script>
 export default {
   name: "DataTable",
-  props: ["items", "headers"],
+  props: ["items", "headers", "loading", "dialog"],
   data: () => {
-    return {
-      selected: [],
-      columns: [],
-    };
+    return {};
   },
   created() {},
   methods: {
-    rowSelected(row) {
-      alert(
-        `Você está editando a instituição ${row.name} que possui ${row.cursos} cursos`
-      );
-    },
     editItem(item) {
+      this.$emit("editar", item);
       console.log(item);
     },
     deleteItem(item) {
       console.log(item);
-    },
-    linhaPar(row, index) {
-      console.log(row);
-      console.log(index);
-      return "teste";
     },
   },
   computed: {},
