@@ -30,6 +30,7 @@ routes.post("/instituicao/check", CollegeController.checkName);
 
 routes.get("/instituicao", CollegeController.get);
 routes.post("/instituicao", CollegeController.cadastro);
+routes.post("/instituicao/edit", CollegeController.editar);
 
 routes.get("/user", UserController.getFuncionarios);
 routes.delete("/user", UserController.deleteFuncionarios);

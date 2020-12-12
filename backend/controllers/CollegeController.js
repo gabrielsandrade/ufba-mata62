@@ -24,26 +24,18 @@ module.exports = {
   create(instituicao, response) {
     let validadora = instituicao.eh_validadora
       ? instituicao.eh_validadora
-      : null;
-    let nome_instituicao = instituicao.nome_instituicao
-      ? instituicao.nome_instituicao
-      : null;
-    let rua = instituicao.rua ? instituicao.rua : null;
-    let numero = instituicao.numero ? instituicao.numero : null;
-    let bairro = instituicao.bairro ? instituicao.bairro : null;
-    let cep = instituicao.cep ? instituicao.cep : null;
-    let cidade = instituicao.cidade ? instituicao.cidade : null;
-    let estado = instituicao.estado ? instituicao.estado : null;
-    let credenciamento = instituicao.credenciamento
-      ? instituicao.credenciamento
-      : null;
-    let mantenedora_nome = instituicao.mantenedora_nome
-      ? instituicao.mantenedora_nome
-      : null;
-    let mantenedora_cnpj = instituicao.mantenedora_cnpj
-      ? instituicao.mantenedora_cnpj
-      : null;
-    let status = instituicao.status ? instituicao.status : null;
+      : false;
+    let nome_instituicao = instituicao.nome_instituicao;
+    let rua = instituicao.rua;
+    let numero = instituicao.numero;
+    let bairro = instituicao.bairro;
+    let cep = instituicao.cep;
+    let cidade = instituicao.cidade;
+    let estado = instituicao.estado;
+    let credenciamento = instituicao.credenciamento;
+    let mantenedora_nome = instituicao.mantenedora_nome;
+    let mantenedora_cnpj = instituicao.mantenedora_cnpj;
+    let status = instituicao.status ? instituicao.status : "pendente";
     console.log(
       validadora,
       nome_instituicao,
@@ -80,6 +72,7 @@ module.exports = {
       let inst = result[0],
         created = result[1];
       if (!created) {
+        console.log(inst);
         return false;
       } else {
         console.log("Instituição cadastrada...");
@@ -110,7 +103,8 @@ module.exports = {
           }
         );
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         return response
           .status(400)
           .json({ error: "Instituição já cadastrada" });
@@ -137,5 +131,33 @@ module.exports = {
         else return response.json({ data: "Nome válido" });
       })
       .catch((err) => response.json({ error: err }));
+  },
+
+  editar(request, response) {
+    let params = request.body;
+    console.log(request.session);
+    console.log(request.body);
+    return Instituicao.findOne({
+      where: { nome_instituicao: params.instituicao.nome_instituicao },
+    }).then((instituicao) => {
+      instituicao
+        .update({
+          eh_validadora: params.instituicao.eh_validadora,
+          nome_instituicao: params.instituicao.nome_instituicao,
+          rua: params.instituicao.rua,
+          numero: params.instituicao.numero,
+          bairro: params.instituicao.bairro,
+          cep: params.instituicao.cep,
+          cidade: params.instituicao.cidade,
+          estado: params.instituicao.estado,
+          credenciamento: params.instituicao.credenciamento,
+          mantenedora_nome: params.instituicao.mantenedora_nome,
+          mantenedora_cnpj: params.instituicao.mantenedora_cnpj,
+          status: params.instituicao.status,
+        })
+        .then(() => {
+          return response.json({ info: "success", data: instituicao });
+        });
+    });
   },
 };
