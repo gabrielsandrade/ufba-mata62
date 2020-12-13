@@ -5,6 +5,7 @@ const {
   Instituicao,
   Curso,
   Gestao,
+  RenovacaoDeCursos,
 } = require("../database/connection");
 const moment = require("moment");
 const crypto = require("crypto");

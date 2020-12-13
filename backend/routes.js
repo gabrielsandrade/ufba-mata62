@@ -6,6 +6,7 @@ const {
   Instituicao,
   Curso,
   Gestao,
+  RenovacaoDeCursos,
 } = require("./database/connection");
 const moment = require("moment");
 const SessionController = require("./controllers/SessionController");
