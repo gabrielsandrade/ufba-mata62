@@ -13,6 +13,23 @@
             @keyup="nomeEmUso = false"
           ></v-text-field>
         </v-card>
+        <v-card elevation="0" class="d-flex">
+          <v-text-field
+            :rules="
+              $v.inst.mantenedora_nome.$invalid ? ['Campo obrigatório'] : []
+            "
+            v-model="inst.mantenedora_nome"
+            label="Nome da mantenedora"
+            class="mr-4"
+          ></v-text-field>
+          <v-text-field
+            :rules="
+              $v.inst.mantenedora_cnpj.$invalid ? ['Campo obrigatório'] : []
+            "
+            v-model="inst.mantenedora_cnpj"
+            label="CNPJ da mantenedora"
+          ></v-text-field>
+        </v-card>
         <p class="ma-0 text-left blue-grey--text">ENDEREÇO</p>
         <v-card elevation="0">
           <v-text-field
@@ -69,7 +86,8 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import Api from "../../../../services/api.js";
+// import Api from "../../../../services/api.js";
+import { checkNomeDaInstituicao } from "../../../../services/CheckAvailability";
 export default {
   props: ["etapa", "instituicao"],
   data: () => {
@@ -78,6 +96,8 @@ export default {
       nomeEmUso: false,
       inst: {
         nome_instituicao: null,
+        mantenedora_nome: null,
+        mantenedora_cnpj: null,
         cep: null,
         rua: null,
         numero: null,
@@ -91,6 +111,8 @@ export default {
     return {
       inst: {
         nome_instituicao: { required },
+        mantenedora_nome: { required },
+        mantenedora_cnpj: { required },
         cep: { required },
         rua: { required },
         numero: { required },
@@ -102,38 +124,35 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // if (this.$v.inst.$invalid) return;
       this.loading = true;
-      Api.post("/instituicao/check", {
-        nome_instituicao: this.inst.nome_instituicao,
-      })
-        .then((result) => {
+      checkNomeDaInstituicao(this.inst.nome_instituicao)
+        .then(() => {
           this.nomeEmUso = false;
           this.$emit("avancarEtapa");
-          return result;
         })
         .catch(() => {
           this.nomeEmUso = true;
-          console.log(this.nomeEmUso);
         })
         .finally(() => (this.loading = false));
     },
   },
   created() {
-    console.log(this.inst);
-    console.log(this.instituicao);
     this.inst = this.instituicao;
   },
   computed: {
     nomeRules() {
       let rules = [];
-      if(!this.inst.nome_instituicao) rules.push("Campo obrigatório");
-      if(this.nomeEmUso) rules.push("Nome já está em uso");
+      if (!this.inst.nome_instituicao) rules.push("Campo obrigatório");
+      if (this.nomeEmUso) rules.push("Nome já está em uso");
       console.log(rules);
       return rules;
-    }
+    },
   },
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="scss">
+.form {
+  overflow: hidden;
+}
+</style>

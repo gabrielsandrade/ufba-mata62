@@ -18,7 +18,7 @@
           v-if="isValidadora"
         >
           <v-icon>mdi-office-building</v-icon>
-          <v-card-title >Instituições</v-card-title>
+          <v-card-title>Instituições</v-card-title>
         </v-card>
         <v-card
           exact
@@ -41,6 +41,18 @@
         >
           <v-icon>mdi-account-multiple</v-icon>
           <v-card-title>Funcionários</v-card-title>
+        </v-card>
+
+        <v-card
+          exact
+          to="/home/instituicoes"
+          height="250px"
+          min-width="250px"
+          hover
+          class="my-4"
+        >
+          <v-icon>mdi-account-multiple</v-icon>
+          <v-card-title>Solicitações</v-card-title>
         </v-card>
       </div>
     </div>

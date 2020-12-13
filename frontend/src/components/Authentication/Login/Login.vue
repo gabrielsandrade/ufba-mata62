@@ -73,7 +73,8 @@ export default {
           localStorage.email = response.data.usuario;
           localStorage.nome = response.data.nome_usuario;
           localStorage.id_instituicao = response.data.id_instituicao;
-          localStorage.validadora = response.data.validadora,
+          localStorage.validadora = response.data.validadora;
+          localStorage.cargo = response.data.cargo;
           this.$router.push("home");
         })
         .catch(() => (this.errorLogin = true))

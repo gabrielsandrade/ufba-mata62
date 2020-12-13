@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="form-card d-flex justify-center fill-height"
+    class="form-card d-flex justify-center fill-height pb-12"
     elevation="4"
     text
   >
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Api from "../../../services/api.js";
+// import Api from "../../../services/api.js";
 import AuthenticationServices from "../../../services/AuthenticationServices.js";
 import Instituicao from "./Instituicao/Instituicao";
 import Usuario from "./Usuario/Usuario";
@@ -77,18 +77,6 @@ export default {
     },
   },
   methods: {
-    handleSubmit(evt) {
-      let data = {
-        user: evt.target[0].value,
-        senha: evt.target[1].value,
-      };
-      Api.post("login", data)
-        .then(() => {
-          localStorage.nome = this.user;
-          this.$router.push("home");
-        })
-        .catch(() => (this.errorLogin = true));
-    },
     avancarEtapa() {
       console.log("aumentando etapa");
       this.etapa += 1;
@@ -124,6 +112,7 @@ export default {
   width: 500px;
   height: calc(100vh - 48px);
   border-top-left-radius: 0%;
+  overflow: auto;
 }
 
 .form {
