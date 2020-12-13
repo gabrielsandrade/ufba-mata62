@@ -5,6 +5,7 @@ const {
   Instituicao,
   Curso,
   Gestao,
+  RenovacaoDeCursos,
 } = require("../database/connection");
 const UserController = require("../controllers/UserController");
 const moment = require("moment");
@@ -129,6 +130,21 @@ module.exports = {
         if (result)
           return response.status(400).json({ data: "Nome já está em uso" });
         else return response.json({ data: "Nome válido" });
+      })
+      .catch((err) => response.json({ error: err }));
+  },
+
+  returnByStatus(request, response) {
+    let params = request.body;
+    return Instituicao.findOne({
+      where: {
+        status: params.status,
+      },
+    })
+      .then((result) => {
+        if (result)
+          return response.status(400).json({ data: result });
+        else return response.json({ data: "Não há faculdades com esse status" });
       })
       .catch((err) => response.json({ error: err }));
   },
