@@ -100,7 +100,13 @@ export default {
       console.log(this.etapa);
     },
     cadastrar(instituicao, diretor, dirigente) {
-      AuthenticationServices.cadastroInicial(instituicao, diretor, dirigente);
+      AuthenticationServices.cadastroInicial(
+        instituicao,
+        diretor,
+        dirigente
+      ).then(() => {
+        this.$router.go();
+      });
       // this.$router.go("/");
     },
   },

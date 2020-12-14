@@ -15,7 +15,7 @@
           min-width="250px"
           hover
           class="my-4"
-          v-if="isValidadora"
+          v-if="isValidadora && canSeeInst"
         >
           <v-icon>mdi-office-building</v-icon>
           <v-card-title>Instituições</v-card-title>
@@ -27,6 +27,7 @@
           min-width="250px"
           hover
           class="my-4"
+          v-if="canSeeCourses"
         >
           <v-icon>mdi-book-multiple</v-icon>
           <v-card-title>Cursos</v-card-title>
@@ -50,6 +51,7 @@
           min-width="250px"
           hover
           class="my-4"
+          v-if="canSeeSolicitations"
         >
           <v-icon>mdi-account-multiple</v-icon>
           <v-card-title>Solicitações</v-card-title>
@@ -60,12 +62,22 @@
 </template>
 
 <script>
+import consts from "../../consts/consts.js";
 export default {
   name: "Home",
   data: () => {
     return {};
   },
   computed: {
+    canSeeInst() {
+      return consts.CAN_SEE_INST.includes(localStorage.cargo);
+    },
+    canSeeCourses() {
+      return consts.CAN_SEE_COURSES.includes(localStorage.cargo);
+    },
+    canSeeSolicitations() {
+      return consts.CAN_SEE_SOLICITATIONS.includes(localStorage.cargo);
+    },
     isValidadora() {
       return localStorage.validadora;
     },

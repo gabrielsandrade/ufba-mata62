@@ -23,13 +23,21 @@
         <v-divider></v-divider>
         <v-list class=""
           ><v-list-item exact to="/home">Página Inicial</v-list-item>
-          <v-list-item exact to="/home/instituicoes" v-if="validadora"
+          <v-list-item
+            exact
+            to="/home/instituicoes"
+            v-if="isValidadora && canSeeInst"
             >Instituições</v-list-item
           >
-          <v-list-item exact to="/home/cursos" v-if="!validadora"
+          <v-list-item exact to="/home/cursos" v-if="!isValidadora"
             >Cursos</v-list-item
           >
-          <v-list-item exact to="/home/usuarios">Usuários</v-list-item>
+          <v-list-item exact to="/home/usuarios" v-if="canSeeUsers"
+            >Usuários</v-list-item
+          >
+          <v-list-item exact to="/home/solicitacoes" v-if="canSeeInst"
+            >Solicitações</v-list-item
+          >
           <v-list-item class="white--text" color="grey darken" @click="logOut"
             >Sair</v-list-item
           >
@@ -42,6 +50,7 @@
 
 <script>
 import Api from "../../services/api";
+import consts from "../../consts/consts";
 export default {
   name: "Header",
   data: () => {
@@ -72,9 +81,17 @@ export default {
     },
   },
   computed: {
-    validadora: function() {
-      console.log(localStorage.nome);
-      return localStorage.nome == "carol";
+    canSeeUsers() {
+      return true;
+    },
+    canSeeInst() {
+      return consts.CAN_SEE_INST.includes(localStorage.cargo);
+    },
+    canSeeCourses() {
+      return consts.CAN_SEE_COURSES.includes(localStorage.cargo);
+    },
+    isValidadora() {
+      return localStorage.validadora;
     },
   },
 };

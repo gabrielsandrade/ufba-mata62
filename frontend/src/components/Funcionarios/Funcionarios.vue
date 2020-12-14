@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-row justify="center">
+    <v-row justify="center" v-if="canAdd">
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="" class="my-4" dark v-bind="attrs" v-on="on">
@@ -53,7 +53,12 @@
               </v-row>
             </v-container>
             <v-col cols="12" sm="6" md="6">
-              <v-select :items="cargos" label="Cargo" v-model="user.cargo">
+              <v-select
+                :items="cargos"
+                label="Cargo"
+                @change="select"
+                v-model="user.cargo"
+              >
               </v-select>
             </v-col>
           </v-card-text>
@@ -82,6 +87,7 @@
 
 <script>
 import Api from "../../services/api.js";
+import consts from "../../consts/consts.js";
 import DataTable from "../DataTable/DataTable";
 import { checkNomeDoUsuario } from "../../services/CheckAvailability";
 export default {
@@ -101,6 +107,7 @@ export default {
         email: null,
         cpf: null,
         telefone: null,
+        cargo: null,
       },
       logged: null,
       dialog: false,
@@ -111,7 +118,12 @@ export default {
         { text: "CPF", value: "cpf", show: true },
         { text: "Email", value: "email", show: true },
         { text: "Cargo", value: "cargo", show: true },
-        { text: "Ações", value: "actions", sortable: false, show: true },
+        {
+          text: "Ações",
+          value: "actions",
+          sortable: false,
+          show: false,
+        },
       ],
       funcionarios: [],
       cargos: [
@@ -126,6 +138,8 @@ export default {
 
   created() {
     this.loading = true;
+    console.log(this.headers[this.headers.length - 1].show = this.canAdd);
+      
     Api.get("/user")
       .then((response) => {
         response.data.data.forEach((usuario) => {
@@ -144,9 +158,11 @@ export default {
         console.log(err);
       })
       .finally(() => (this.loading = false));
-    console.log(this.funcionarios);
   },
   computed: {
+    canAdd() {
+      return consts.CAN_ADD_USERS.includes(localStorage.cargo);
+    },
     nomeRules() {
       let rules = [];
       if (!this.user.email) rules.push("Campo obrigatório");
@@ -158,10 +174,12 @@ export default {
     },
   },
   methods: {
+    select(item) {
+      console.log(item);
+      console.log(this.user.cargo);
+    },
     salvar(item) {
       console.log(item);
-      console.log(this.editing);
-
       this.loading = true;
       if (!this.editing) {
         checkNomeDoUsuario(this.user.email)
@@ -170,10 +188,12 @@ export default {
             this.$emit("avancarEtapa");
             this.user.senha = "password";
             this.user.id_instituicao = localStorage.id_instituicao;
-            (this.user.cargo = this.cargoFormatted(this.usuario.cargo)),
-              Api.post("user", this.user).then((response) =>
-                console.log(response)
-              );
+            console.log(this.user.cargo);
+            this.user.cargo = this.cargoFormattedReversed(this.user.cargo);
+            console.log(this.user.cargo);
+            Api.post("user", this.user).then((response) =>
+              console.log(response)
+            );
           })
           .catch(() => {
             this.nomeEmUso = true;
@@ -199,10 +219,11 @@ export default {
           return "Coordenador do CARE";
 
         default:
-          return "";
+          return "Colaborador";
       }
     },
     cargoFormattedReversed(cargo) {
+      console.log(cargo);
       switch (cargo) {
         case "Diretor":
           return "DIRE";
@@ -217,7 +238,7 @@ export default {
           return "COORD";
 
         default:
-          return "";
+          return "COL";
       }
     },
     edit(item) {

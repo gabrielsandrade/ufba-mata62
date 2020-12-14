@@ -102,10 +102,11 @@ module.exports = {
   },
 
   deleteFuncionarios(request, response) {
-    Usuario.destroy({ truncate: true });
-    Funcionario.destroy({ truncate: true });
-    Instituicao.destroy({ truncate: true });
-    return response.send("Todo mundo deletado");
+    Usuario.findOne({
+      where: {
+        id_usuario: request.body.id,
+      },
+    }).then((result) => console.log(result));
   },
 
   checkCpf(request, response) {
@@ -113,8 +114,8 @@ module.exports = {
     return Funcionario.findOne({
       where: {
         cpf: params.cpf,
-      },  
-     })
+      },
+    });
   },
   checkName(request, response) {
     let params = request.body;
@@ -122,7 +123,6 @@ module.exports = {
     return Usuario.findOne({
       where: {
         usuario: params.usuario,
-
       },
     })
       .then((result) => {
@@ -132,7 +132,7 @@ module.exports = {
       })
       .catch((err) => response.json({ error: err }));
   },
-  editar(request, reponse){
+  editar(request, reponse) {
     return true;
-  }
+  },
 };

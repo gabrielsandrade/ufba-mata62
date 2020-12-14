@@ -73,8 +73,8 @@ export default {
       Api.post("login", data)
         .then((response) => {
           console.log(response);
-          if (response.status == 401) {
-            response.data.code == 0 ? (this.errorLogin = 0) : (this.errorLogin = 1);
+          if (response.data.code) {
+            this.errorLogin = response.data.code;
           } else {
             localStorage.email = response.data.usuario;
             localStorage.nome = response.data.nome_usuario;
@@ -84,8 +84,8 @@ export default {
             this.$router.push("home");
           }
         })
-        .catch((err) => {
-          console.log(JSON.stringify(err));
+        .catch(() => {
+          this.errorLogin = 1;
         })
         .finally(() => (this.loading = false));
     },

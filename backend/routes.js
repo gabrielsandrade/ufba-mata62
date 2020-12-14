@@ -42,7 +42,7 @@ routes.post("/user", UserController.createUser);
 
 //routes.post("/user/check", UserController.checkCpf);
 
-//routes.get("/curso", CourseController.get);
+routes.get("/curso", CourseController.get);
 routes.post("/curso", CourseController.createCurso);
 
 routes.post("/user/edit", UserController.editar);

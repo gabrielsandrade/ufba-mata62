@@ -4,13 +4,13 @@
       {{ user }} você está na tela de cursos
     </p>
     <div class="list-cursos mx-2 px-8">
-      <DataTable :items="faculdades" :headers="headers" />
+      <DataTable :items="cursos" :headers="headers" />
     </div>
   </div>
 </template>
 
 <script>
-// import Api from "../services/api.js";
+import Api from "../../services/api.js";
 import DataTable from "../DataTable/DataTable";
 export default {
   name: "HelloWorld",
@@ -19,71 +19,48 @@ export default {
   },
   data: () => {
     return {
-      user:
-        localStorage.nome,
+      user: localStorage.nome,
       logged: null,
       headers: [
-        { text: "Curso", value: "name" },
-        { text: "Alunos", value: "cursos" },
-        { text: "Código", value: "codigo" },
-        { text: "Ações", value: "actions", sortable: false },
+        // { text: "Curso", value: "name" },
+        // { text: "Alunos", value: "cursos" },
+        // { text: "Código", value: "codigo" },
+        // { text: "Ações", value: "actions", sortable: false },
+        { text: "nome_curso" , value : "nome_curso" },
+        { text: "grau" , value : "grau" },
+        { text: "codigo_mec" , value : "codigo_mec" },
+        { text: "id_curso" , value : "id_curso" },
+        { text: "id_instituicao" , value : "id_instituicao" },
+        { text: "publicacao" , value : "publicacao" },
+        { text: "publicacao_data" , value : "publicacao_data" },
+        { text: "reconhecimento" , value : "reconhecimento" },
+        { text: "reconhecimento_data" , value : "reconhecimento_data" },
+        { text: "observacao" , value : "observacao" },
       ],
-      faculdades: [
-        {
-          name: "Engenharia Elétrica",
-          cursos: 37,
-          codigo: "XXXXX",
-        },
-        {
-          name: "Engenharia Civil",
-          cursos: 40,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UNIJORGE",
-          cursos: 54,
-          codigo: "XXXXX",
-        },
-        {
-          name: "Faculdade 2 de Julho",
-          cursos: 70,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UNIME",
-          cursos: 62,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UNIRB",
-          cursos: 79,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UNIFACS",
-          cursos: 56,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UCSAL",
-          cursos: 43,
-          codigo: "XXXXX",
-        },
-        {
-          name: "UNIESQUINA",
-          cursos: 92,
-          codigo: "XXXXX",
-        },
-        {
-          name: "Faculdade outra da Devry",
-          cursos: 25,
-          codigo: "XXXXX",
-        },
-      ],
+      cursos: [],
     };
   },
 
-  created() {},
+  created() {
+    Api.get("curso").then((response) => {
+      console.log(response);
+      response.data.data.forEach((element) => {
+        let curso = {
+          nome_curso: element.nome_curso,
+          grau: element.grau,
+          codigo_mec: element.codigo_mec,
+          id_curso: element.id_curso,
+          id_instituicao: element.id_instituicao,
+          publicacao: element.publicacao,
+          publicacao_data: element.publicacao_data,
+          reconhecimento: element.reconhecimento,
+          reconhecimento_data: element.reconhecimento_data,
+          observacao: element.observacao,
+        };
+        this.cursos.push(curso);
+      });
+    });
+  },
 };
 </script>
 <style lang="scss" scoped>

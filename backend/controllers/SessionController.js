@@ -31,17 +31,19 @@ module.exports = {
     let senha = request.body.senha;
     let senhaCryp = criptografaSenha(senha);
 
-    Usuario.findOne({
+    return Usuario.findOne({
       where: {
         usuario: usuario,
       },
     }).then((user) => {
-      if (!user)
+      console.log(user);
+      if (!user) {
+        console.log("parei aqui");
         return response
           .status(401)
-          .json({ error: "Usuário ou senha inválidos", code: 1  });
-      if (senhaCryp == user.senha) {
-        Funcionario.findOne({
+          .json({ error: "Usuário ou senha inválidos", code: 1 });
+      } else if (senhaCryp == user.senha) {
+        return Funcionario.findOne({
           where: {
             id_funcionario: user.id_usuario,
           },
@@ -53,22 +55,24 @@ module.exports = {
                 id_instituicao: funcionario.id_instituicao,
               },
             }).then((instituicao) => {
-              if (instituicao.status === "pendente")
-                return response.json(401).json({
+              if (instituicao.status === "pendente") {
+                return response.status(200).json({
                   error: "Sua instituição ainda não foi aprovada na plataforma",
                   code: 0,
                 });
-              request.session.id_instituicao = funcionario.id_instituicao;
-              request.session.usuario = usuario;
-              console.log(funcionario);
-              return response.json({
-                usuario: usuario,
-                nome_usuario: funcionario.nome_funcionario,
-                id_instituicao: instituicao.id_instituicao,
-                login_time: date,
-                validadora: instituicao.eh_validadora,
-                cargo: funcionario.cargo,
-              });
+              } else {
+                console.log(funcionario);
+                request.session.id_instituicao = funcionario.id_instituicao;
+                request.session.usuario = usuario;
+                return response.json({
+                  usuario: usuario,
+                  nome_usuario: funcionario.nome_funcionario,
+                  id_instituicao: instituicao.id_instituicao,
+                  login_time: date,
+                  validadora: instituicao.eh_validadora,
+                  cargo: funcionario.cargo,
+                });
+              }
             });
           })
           .catch((err) => {
