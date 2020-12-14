@@ -170,9 +170,10 @@ export default {
             this.$emit("avancarEtapa");
             this.user.senha = "password";
             this.user.id_instituicao = localStorage.id_instituicao;
-            Api.post("user", this.user).then((response) =>
-              console.log(response)
-            );
+            (this.user.cargo = this.cargoFormatted(this.usuario.cargo)),
+              Api.post("user", this.user).then((response) =>
+                console.log(response)
+              );
           })
           .catch(() => {
             this.nomeEmUso = true;
@@ -193,6 +194,27 @@ export default {
 
         case "SUPER":
           return "Superintendente";
+
+        case "COORD":
+          return "Coordenador do CARE";
+
+        default:
+          return "";
+      }
+    },
+    cargoFormattedReversed(cargo) {
+      switch (cargo) {
+        case "Diretor":
+          return "DIRE";
+
+        case "Dirigente":
+          return "DIRI";
+
+        case "Superintendente":
+          return "SUPER";
+
+        case "Coordenador do CARE":
+          return "COORD";
 
         default:
           return "";

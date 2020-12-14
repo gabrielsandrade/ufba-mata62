@@ -122,4 +122,7 @@ module.exports = {
       })
       .catch((err) => response.json({ error: err }));
   },
+  editar(request, reponse){
+    return true;
+  }
 };
