@@ -136,17 +136,16 @@ module.exports = {
 
   returnByStatus(request, response) {
     let params = request.body;
-    return Instituicao.findOne({
+    return Instituicao.findAll({
       where: {
         status: params.status,
       },
     })
       .then((result) => {
-        if (result)
-          return response.status(400).json({ data: result });
-        else return response.json({ data: "Não há faculdades com esse status" });
+        if (Object.keys(result).length !== 0)
+          return response.json({ data: result });
+        else return response.status(404).json({ data: "Não há faculdades com esse status" });
       })
-      .catch((err) => response.json({ error: err }));
   },
 
   editar(request, response) {
