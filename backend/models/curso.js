@@ -15,8 +15,6 @@ module.exports = (sequelize, Sequelize) => {
       publicacao_data: Sequelize.DATE,
       reconhecimento: Sequelize.STRING,
       reconhecimento_data: Sequelize.DATE,
-      renovacao: Sequelize.STRING,
-      renovacao_data: Sequelize.DATE,
       observacao: Sequelize.STRING,
     },
     { freezeTableName: true, timestamps: false }

@@ -6,6 +6,7 @@ const {
   Instituicao,
   Curso,
   Gestao,
+  RenovacaoDeCursos,
 } = require("../database/connection");
 const moment = require("moment");
 const { response } = require("express");
@@ -105,5 +106,20 @@ module.exports = {
     Funcionario.destroy({ truncate: true });
     Instituicao.destroy({ truncate: true });
     return response.send("Todo mundo deletado");
+  },
+
+  checkCpf(request, response) {
+    let params = request.body;
+    return Funcionario.findOne({
+      where: {
+        cpf: params.cpf,
+      },
+    })
+      .then((result) => {
+        if (result)
+          return response.status(400).json({ data: "Cpf já cadastrado no sistema" });
+        else return response.json({ data: "Cpf válido para cadastro" });
+      })
+      .catch((err) => response.json({ error: err }));
   },
 };
