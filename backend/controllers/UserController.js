@@ -67,7 +67,7 @@ module.exports = {
       }
       console.log("Funcionário cadastrado...");
       // return response.json({ data: "success" });
-      return true;
+      return response.json({ data: "success" });
     });
   },
   createLogin(params, response) {
@@ -105,5 +105,21 @@ module.exports = {
     Funcionario.destroy({ truncate: true });
     Instituicao.destroy({ truncate: true });
     return response.send("Todo mundo deletado");
+  },
+
+  checkName(request, response) {
+    let params = request.body;
+    console.log(params);
+    return Usuario.findOne({
+      where: {
+        usuario: params.usuario,
+      },
+    })
+      .then((result) => {
+        if (result)
+          return response.status(400).json({ data: "Nome já está em uso" });
+        else return response.json({ data: "Nome válido" });
+      })
+      .catch((err) => response.json({ error: err }));
   },
 };

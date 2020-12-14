@@ -38,6 +38,8 @@ routes.post("/instituicao/edit", CollegeController.editar);
 routes.get("/user", UserController.getFuncionarios);
 routes.delete("/user", UserController.deleteFuncionarios);
 routes.post("/user", UserController.createUser);
+routes.post("/user/edit", UserController.editar);
+routes.post("/user/check", UserController.checkName);
 
 // routes.get("/teste", (req, res) => {
 //   let query = "SHOW COLUMNS FROM funcionarios";

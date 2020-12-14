@@ -5,6 +5,7 @@ import Funcionarios from "@/components/Funcionarios/Funcionarios";
 import Header from "@/components/Header/Header";
 import Cursos from "@/components/Cursos/Cursos";
 import Instituicoes from "@/components/Instituicoes/Instituicoes";
+import Solicitacoes from "@/components/Solicitacoes/Solicitacoes";
 import Home from "@/components/Home/Home";
 
 Vue.use(Router);
@@ -22,16 +23,20 @@ const router = new Router({
           component: Home,
         },
         {
-          path: 'cursos',
+          path: "cursos",
           component: Cursos,
         },
         {
-          path: 'instituicoes',
+          path: "instituicoes",
           component: Instituicoes,
         },
         {
-          path: 'usuarios',
+          path: "usuarios",
           component: Funcionarios,
+        },
+        {
+          path: "solicitacoes",
+          component: Solicitacoes,
         },
       ],
     },

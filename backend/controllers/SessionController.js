@@ -39,7 +39,7 @@ module.exports = {
       if (!user)
         return response
           .status(401)
-          .json({ error: "Usuário ou senha inválidos" });
+          .json({ error: "Usuário ou senha inválidos", code: 1  });
       if (senhaCryp == user.senha) {
         Funcionario.findOne({
           where: {
@@ -53,6 +53,11 @@ module.exports = {
                 id_instituicao: funcionario.id_instituicao,
               },
             }).then((instituicao) => {
+              if (instituicao.status === "pendente")
+                return response.json(401).json({
+                  error: "Sua instituição ainda não foi aprovada na plataforma",
+                  code: 0,
+                });
               request.session.id_instituicao = funcionario.id_instituicao;
               request.session.usuario = usuario;
               console.log(funcionario);
@@ -72,7 +77,7 @@ module.exports = {
       } else
         return response
           .status(401)
-          .json({ error: "Usuário ou senha inválidos" });
+          .json({ error: "Usuário ou senha inválidos", code: 1 });
     });
   },
 

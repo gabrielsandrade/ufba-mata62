@@ -45,7 +45,7 @@
 
         <v-card
           exact
-          to="/home/instituicoes"
+          to="/home/solicitacoes"
           height="250px"
           min-width="250px"
           hover

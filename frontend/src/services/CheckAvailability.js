@@ -16,4 +16,19 @@ module.exports = {
         });
     });
   },
+  checkNomeDoUsuario(usuario) {
+    console.log(usuario);
+    return new Promise((resolve, reject) => {
+      api
+        .post("/user/check", {
+          usuario: usuario,
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -22,8 +22,11 @@
           class="inputField"
         ></v-text-field>
       </div>
-      <p class="error--text" v-if="errorLogin">
+      <p class="error--text" v-if="errorLogin == 0">
         Sua instituição ainda possui cadastro pendente
+      </p>
+      <p class="error--text" v-if="errorLogin == 1">
+        Usuário ou senha inválidos
       </p>
       <div class="d-flex justify-space-between flex-column align-center mt-8">
         <v-btn
@@ -70,14 +73,20 @@ export default {
       Api.post("login", data)
         .then((response) => {
           console.log(response);
-          localStorage.email = response.data.usuario;
-          localStorage.nome = response.data.nome_usuario;
-          localStorage.id_instituicao = response.data.id_instituicao;
-          localStorage.validadora = response.data.validadora;
-          localStorage.cargo = response.data.cargo;
-          this.$router.push("home");
+          if (response.status == 401) {
+            response.data.code == 0 ? (this.errorLogin = 0) : (this.errorLogin = 1);
+          } else {
+            localStorage.email = response.data.usuario;
+            localStorage.nome = response.data.nome_usuario;
+            localStorage.id_instituicao = response.data.id_instituicao;
+            localStorage.validadora = response.data.validadora;
+            localStorage.cargo = response.data.cargo;
+            this.$router.push("home");
+          }
         })
-        .catch(() => (this.errorLogin = true))
+        .catch((err) => {
+          console.log(JSON.stringify(err));
+        })
         .finally(() => (this.loading = false));
     },
   },
