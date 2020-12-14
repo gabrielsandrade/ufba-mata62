@@ -6,6 +6,7 @@ const {
   Instituicao,
   Curso,
   Gestao,
+  RenovacaoDeCursos,
 } = require("../database/connection");
 const moment = require("moment");
 const { response } = require("express");
@@ -107,12 +108,21 @@ module.exports = {
     return response.send("Todo mundo deletado");
   },
 
+  checkCpf(request, response) {
+    let params = request.body;
+    return Funcionario.findOne({
+      where: {
+        cpf: params.cpf,
+      },  
+     })
+  },
   checkName(request, response) {
     let params = request.body;
     console.log(params);
     return Usuario.findOne({
       where: {
         usuario: params.usuario,
+
       },
     })
       .then((result) => {

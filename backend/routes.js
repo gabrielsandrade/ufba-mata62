@@ -16,6 +16,7 @@ const { get } = require("./controllers/CollegeController");
 const { Router } = require("express");
 const user = require("./models/usuario");
 const CollegeController = require("./controllers/CollegeController");
+const CourseController = require("./controllers/CourseController");
 
 function getTimeNow() {
   return moment().format("h:mm:ss, DD/MM/YYYY");
@@ -38,8 +39,15 @@ routes.post("/instituicao/edit", CollegeController.editar);
 routes.get("/user", UserController.getFuncionarios);
 routes.delete("/user", UserController.deleteFuncionarios);
 routes.post("/user", UserController.createUser);
+
+//routes.post("/user/check", UserController.checkCpf);
+
+//routes.get("/curso", CourseController.get);
+routes.post("/curso", CourseController.createCurso);
+
 routes.post("/user/edit", UserController.editar);
 routes.post("/user/check", UserController.checkName);
+
 
 // routes.get("/teste", (req, res) => {
 //   let query = "SHOW COLUMNS FROM funcionarios";
