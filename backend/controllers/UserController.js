@@ -68,7 +68,7 @@ module.exports = {
       }
       console.log("Funcionário cadastrado...");
       // return response.json({ data: "success" });
-      return true;
+      return response.json({ data: "success" });
     });
   },
   createLogin(params, response) {
@@ -113,12 +113,22 @@ module.exports = {
     return Funcionario.findOne({
       where: {
         cpf: params.cpf,
+      },  
+     })
+  },
+  checkName(request, response) {
+    let params = request.body;
+    console.log(params);
+    return Usuario.findOne({
+      where: {
+        usuario: params.usuario,
+
       },
     })
       .then((result) => {
         if (result)
-          return response.status(400).json({ data: "Cpf já cadastrado no sistema" });
-        else return response.json({ data: "Cpf válido para cadastro" });
+          return response.status(400).json({ data: "Nome já está em uso" });
+        else return response.json({ data: "Nome válido" });
       })
       .catch((err) => response.json({ error: err }));
   },

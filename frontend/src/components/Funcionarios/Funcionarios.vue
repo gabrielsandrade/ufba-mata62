@@ -18,6 +18,8 @@
                   <v-text-field
                     label="Email*"
                     v-model="user.email"
+                    :rules="nomeRules"
+                    @keyup="nomeEmUso = false"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="6">
@@ -31,6 +33,7 @@
                   <v-text-field
                     label="Sobrenome"
                     hint="example of helper text only on focus"
+                    v-model="user.sobrenome"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="6">
@@ -50,7 +53,8 @@
               </v-row>
             </v-container>
             <v-col cols="12" sm="6" md="6">
-              <v-select :items="cargos" label="Cargo"> </v-select>
+              <v-select :items="cargos" label="Cargo" v-model="user.cargo">
+              </v-select>
             </v-col>
           </v-card-text>
           <v-card-actions>
@@ -58,7 +62,7 @@
             <v-btn color="blue darken-1" text @click="reset">
               Fechar
             </v-btn>
-            <v-btn color="blue darken-1" text @click="dialog = false">
+            <v-btn color="blue darken-1" text @click="salvar">
               Salvar
             </v-btn>
           </v-card-actions>
@@ -79,6 +83,7 @@
 <script>
 import Api from "../../services/api.js";
 import DataTable from "../DataTable/DataTable";
+import { checkNomeDoUsuario } from "../../services/CheckAvailability";
 export default {
   name: "HelloWorld",
   components: {
@@ -86,8 +91,10 @@ export default {
   },
   data: () => {
     return {
+      editing: false,
       loading: false,
       usuario: localStorage.nome.toUpperCase(),
+      nomeEmUso: null,
       user: {
         nome: null,
         sobrenome: null,
@@ -140,11 +147,41 @@ export default {
     console.log(this.funcionarios);
   },
   computed: {
+    nomeRules() {
+      let rules = [];
+      if (!this.user.email) rules.push("Campo obrigatório");
+      if (this.nomeEmUso) rules.push("Nome já está em uso");
+      return rules;
+    },
     _headers() {
       return this.headers.filter((h) => h.show);
     },
   },
   methods: {
+    salvar(item) {
+      console.log(item);
+      console.log(this.editing);
+
+      this.loading = true;
+      if (!this.editing) {
+        checkNomeDoUsuario(this.user.email)
+          .then(() => {
+            this.nomeEmUso = false;
+            this.$emit("avancarEtapa");
+            this.user.senha = "password";
+            this.user.id_instituicao = localStorage.id_instituicao;
+            Api.post("user", this.user).then((response) =>
+              console.log(response)
+            );
+          })
+          .catch(() => {
+            this.nomeEmUso = true;
+          })
+          .finally(() => (this.loading = false));
+      } else {
+        console.log(this.user);
+      }
+    },
     cargoFormatted(cargo) {
       console.log(cargo);
       switch (cargo) {
@@ -162,6 +199,8 @@ export default {
       }
     },
     edit(item) {
+      console.log("aasd");
+      this.editing = true;
       this.user.nome = item.nome;
       this.user.sobrenome = item.sobrenome;
       this.user.email = item.email;
@@ -173,6 +212,7 @@ export default {
     save() {},
     reset() {
       this.dialog = false;
+      this.editing = false;
       this.user.nome = null;
       this.user.sobrenome = null;
       this.user.email = null;

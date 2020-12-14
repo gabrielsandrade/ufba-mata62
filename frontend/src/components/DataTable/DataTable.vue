@@ -15,10 +15,10 @@
     </template> -->
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
+        {{ !solicitacao ? "mdi-pencil" : "mdi-check-bold" }}
       </v-icon>
       <v-icon small @click="deleteItem(item)">
-        mdi-delete
+        {{ !solicitacao ? "mdi-delete" : "mdi-close-thick" }}
       </v-icon>
     </template>
   </v-data-table>
@@ -27,17 +27,19 @@
 <script>
 export default {
   name: "DataTable",
-  props: ["items", "headers", "loading", "dialog"],
+  props: ["items", "headers", "loading", "dialog", "solicitacao"],
   data: () => {
     return {};
   },
   created() {},
   methods: {
     editItem(item) {
-      this.$emit("editar", item);
+      if (!this.solicitacao) this.$emit("editar", item);
+      else this.$emit("accept", item);
       console.log(item);
     },
     deleteItem(item) {
+      if (!this.solicitacao) this.$emit("delete-inst", item);
       console.log(item);
     },
   },

@@ -1,13 +1,12 @@
 <template>
   <div class="main">
     <div class="list-cursos mx-2 px-8">
-      <ModalInstituicao ref="modalInst" v-if="isSuperintendente" />
-      <ModalUsuario />
       <DataTable
         :items="instituicoes"
         :headers="_headers"
         :loading="loading"
-        v-on:editar="edit"
+        solicitacao="true"
+        v-on:accept="accept"
       />
     </div>
   </div>
@@ -15,15 +14,12 @@
 
 <script>
 import Api from "../../services/api.js";
+import AuthenticationServices from "../../services/AuthenticationServices";
 import DataTable from "../DataTable/DataTable";
-import ModalInstituicao from "./components/ModalInstituicao";
-import ModalUsuario from "./components/ModalUsuario";
 export default {
   name: "InstituicoesAtivas",
   components: {
     DataTable,
-    ModalInstituicao,
-    ModalUsuario,
   },
   data: () => {
     return {
@@ -49,7 +45,7 @@ export default {
 
   created() {
     this.loading = true;
-    Api.post("/instituicao", { status: "ativo" })
+    Api.post("/instituicao", { status: "pendente" })
       .then((response) => {
         response.data.data.forEach((instituicao) => {
           let inst = {
@@ -81,20 +77,12 @@ export default {
     },
   },
   methods: {
-    edit(item) {
-      this.$refs.modalInst.instituicao.nome_instituicao = item.nome_instituicao;
-      this.$refs.modalInst.instituicao.mantenedora_nome = item.mantenedora_nome;
-      this.$refs.modalInst.instituicao.mantenedora_cnpj = item.mantenedora_cnpj;
-      this.$refs.modalInst.instituicao.credenciamento = item.credenciamento;
-      this.$refs.modalInst.instituicao.cep = item.cep;
-      this.$refs.modalInst.instituicao.rua = item.rua;
-      this.$refs.modalInst.instituicao.bairro = item.bairro;
-      this.$refs.modalInst.instituicao.cidade = item.cidade;
-      this.$refs.modalInst.instituicao.estado = item.estado;
-      this.$refs.modalInst.instituicao.status = item.status;
-      this.$refs.modalInst.dialog = true;
-      this.$refs.modalInst.editing = true;
-      this.$refs.modalInst.nomeOriginal = item.nome_instituicao;
+    accept(instituicao) {
+      instituicao.status = "ativo";
+      console.log(instituicao);
+      AuthenticationServices.editarInstituicao(instituicao)
+        .then(() => this.$router.go())
+        .catch((err) => console.log(err));
     },
   },
 };
