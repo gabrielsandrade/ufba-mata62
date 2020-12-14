@@ -142,6 +142,7 @@ module.exports = {
       },
     })
       .then((result) => {
+        console.log(result);
         if (Object.keys(result).length !== 0)
           return response.json({ data: result });
         else return response.status(404).json({ data: "Não há faculdades com esse status" });

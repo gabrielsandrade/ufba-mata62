@@ -33,17 +33,6 @@ const {
       let reconhecimento = params.reconhecimento;
       let reconhecimento_data = params.reconhecimento_data;
       let observacao = params.observacao;
-      console.log(
-        id_instituicao,
-        nome_curso, 
-        grau,
-        codigo_mec,
-        publicacao,
-        publicacao_data,
-        reconhecimento,
-        reconhecimento_data,
-        observacao
-      );
       return Curso.findOrCreate({
         where: {
             codigo_mec: codigo_mec, 

@@ -155,7 +155,7 @@ export default {
         bairro: null,
         cidade: null,
         estado: null,
-        status: "ativo",
+        status: "Ativa",
       },
     };
   },
@@ -190,7 +190,7 @@ export default {
       this.instituicao.bairro = null;
       this.instituicao.cidade = null;
       this.instituicao.estado = null;
-      this.instituicao.status = "ativo";
+      this.instituicao.status = "Ativa";
       this.dialog = false;
     },
     next() {

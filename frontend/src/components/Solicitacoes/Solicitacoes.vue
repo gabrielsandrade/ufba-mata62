@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     accept(instituicao) {
-      instituicao.status = "ativo";
+      instituicao.status = "Ativa";
       console.log(instituicao);
       AuthenticationServices.editarInstituicao(instituicao)
         .then(() => this.$router.go())

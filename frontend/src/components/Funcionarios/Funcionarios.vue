@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-row justify="center" v-if="canAdd">
+    <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="" class="my-4" dark v-bind="attrs" v-on="on">
@@ -138,8 +138,8 @@ export default {
 
   created() {
     this.loading = true;
-    console.log(this.headers[this.headers.length - 1].show = this.canAdd);
-      
+    this.headers[this.headers.length - 1].show = this.canAdd;
+
     Api.get("/user")
       .then((response) => {
         response.data.data.forEach((usuario) => {

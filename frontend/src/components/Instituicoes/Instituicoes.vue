@@ -49,7 +49,7 @@ export default {
 
   created() {
     this.loading = true;
-    Api.post("/instituicao", { status: "ativo" })
+    Api.post("/instituicao", { status: "Ativa" })
       .then((response) => {
         response.data.data.forEach((instituicao) => {
           let inst = {
