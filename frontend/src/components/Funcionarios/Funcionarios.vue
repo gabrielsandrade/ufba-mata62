@@ -80,6 +80,7 @@
         :headers="_headers"
         :loading="loading"
         v-on:editar="edit"
+        v-on:delete="deleteUser"
       />
     </div>
   </div>
@@ -140,28 +141,11 @@ export default {
     this.loading = true;
     this.headers[this.headers.length - 1].show = this.canAdd;
 
-    Api.get("/user")
-      .then((response) => {
-        response.data.data.forEach((usuario) => {
-          let funcionario = {
-            nome: usuario.nome_funcionario,
-            sobrenome: usuario.sobrenome,
-            telefone: usuario.telefone_funcionario,
-            cpf: usuario.cpf,
-            email: usuario.email_funcionario,
-            cargo: this.cargoFormatted(usuario.cargo),
-          };
-          this.funcionarios.push(funcionario);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => (this.loading = false));
+    this.getUsers();
   },
   computed: {
     canAdd() {
-      return consts.CAN_ADD_USERS.includes(localStorage.cargo);
+      return consts.CAN_MANAGE_USERS.includes(localStorage.cargo);
     },
     nomeRules() {
       let rules = [];
@@ -174,6 +158,33 @@ export default {
     },
   },
   methods: {
+    getUsers() {
+      this.funcionarios = [];
+      Api.get("/user")
+        .then((response) => {
+          response.data.data.forEach((usuario) => {
+            let funcionario = {
+              nome: usuario.nome_funcionario,
+              sobrenome: usuario.sobrenome,
+              telefone: usuario.telefone_funcionario,
+              cpf: usuario.cpf,
+              email: usuario.email_funcionario,
+              cargo: this.cargoFormatted(usuario.cargo),
+            };
+            this.funcionarios.push(funcionario);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    deleteUser(item) {
+      console.log(item);
+      Api.post("user/delete", { email: item.email }).then(() =>
+        this.getUsers()
+      );
+    },
     select(item) {
       console.log(item);
       console.log(this.user.cargo);

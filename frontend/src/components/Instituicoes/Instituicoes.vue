@@ -8,6 +8,7 @@
         :headers="_headers"
         :loading="loading"
         v-on:editar="edit"
+        v-on:delete="deleteInst"
       />
     </div>
   </div>
@@ -49,28 +50,7 @@ export default {
 
   created() {
     this.loading = true;
-    Api.post("/instituicao", { status: "Ativa" })
-      .then((response) => {
-        response.data.data.forEach((instituicao) => {
-          let inst = {
-            nome_instituicao: instituicao.nome_instituicao,
-            mantenedora_nome: instituicao.mantenedora_nome,
-            mantenedora_cnpj: instituicao.mantenedora_cnpj,
-            credenciamento: instituicao.credenciamento,
-            cep: instituicao.cep,
-            rua: instituicao.rua,
-            bairro: instituicao.bairro,
-            cidade: instituicao.cidade,
-            estado: instituicao.estado,
-            status: instituicao.status,
-          };
-          this.instituicoes.push(inst);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => (this.loading = false));
+    this.getInsts();
   },
   computed: {
     isSuperintendente() {
@@ -81,6 +61,30 @@ export default {
     },
   },
   methods: {
+    getInsts() {
+      Api.post("/instituicao", { status: "Ativa" })
+        .then((response) => {
+          response.data.data.forEach((instituicao) => {
+            let inst = {
+              nome_instituicao: instituicao.nome_instituicao,
+              mantenedora_nome: instituicao.mantenedora_nome,
+              mantenedora_cnpj: instituicao.mantenedora_cnpj,
+              credenciamento: instituicao.credenciamento,
+              cep: instituicao.cep,
+              rua: instituicao.rua,
+              bairro: instituicao.bairro,
+              cidade: instituicao.cidade,
+              estado: instituicao.estado,
+              status: instituicao.status,
+            };
+            this.instituicoes.push(inst);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => (this.loading = false));
+    },
     edit(item) {
       this.$refs.modalInst.instituicao.nome_instituicao = item.nome_instituicao;
       this.$refs.modalInst.instituicao.mantenedora_nome = item.mantenedora_nome;
@@ -95,6 +99,15 @@ export default {
       this.$refs.modalInst.dialog = true;
       this.$refs.modalInst.editing = true;
       this.$refs.modalInst.nomeOriginal = item.nome_instituicao;
+    },
+    deleteInst(item) {
+      console.log(item);
+      Api.post("instituicao/delete", {
+        nome_instituicao: item.nome_instituicao,
+      }).then(() => {
+        this.instituicoes = [];
+        this.getInsts();
+      });
     },
   },
 };

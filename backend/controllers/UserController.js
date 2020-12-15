@@ -102,11 +102,16 @@ module.exports = {
   },
 
   deleteFuncionarios(request, response) {
-    Usuario.findOne({
-      where: {
-        id_usuario: request.body.id,
-      },
-    }).then((result) => console.log(result));
+    console.log(request);
+    return Usuario.destroy({ where: { usuario: request.body.email } }).then(
+      () => {
+        return Funcionario.destroy({
+          where: { email_funcionario: request.body.email },
+        }).then(() => {
+          return response.json({ data: "success" });
+        });
+      }
+    );
   },
 
   checkCpf(request, response) {

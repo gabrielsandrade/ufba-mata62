@@ -27,15 +27,15 @@
             exact
             to="/home/instituicoes"
             v-if="isValidadora && canSeeInst"
-            >Instituições</v-list-item
+            >Instituições
+          </v-list-item>
+          <v-list-item exact to="/home/usuarios" v-if="canSeeUsers"
+            >Funcionários</v-list-item
           >
-          <v-list-item exact to="/home/cursos" v-if="!isValidadora"
+          <v-list-item exact to="/home/cursos" v-if="isValidadora"
             >Cursos</v-list-item
           >
-          <v-list-item exact to="/home/usuarios" v-if="canSeeUsers"
-            >Usuários</v-list-item
-          >
-          <v-list-item exact to="/home/solicitacoes" v-if="canSeeInst"
+          <v-list-item exact to="/home/solicitacoes" v-if="canSeeSolicitations"
             >Solicitações</v-list-item
           >
           <v-list-item class="white--text" color="grey darken" @click="logOut"
@@ -85,13 +85,16 @@ export default {
       return true;
     },
     canSeeInst() {
-      return consts.CAN_SEE_INST.includes(localStorage.cargo);
+      return consts.CAN_GET_EDIT_INST.includes(localStorage.cargo);
     },
     canSeeCourses() {
-      return consts.CAN_SEE_COURSES.includes(localStorage.cargo);
+      return consts.CAN_MANAGE_COURSES.includes(localStorage.cargo);
+    },
+    canSeeSolicitations() {
+      return consts.CAN_GET_SOLICITATIONS.includes(localStorage.cargo);
     },
     isValidadora() {
-      return localStorage.validadora;
+      return consts.CAN_MANAGE_COURSES.includes(localStorage.cargo);
     },
   },
 };

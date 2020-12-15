@@ -39,7 +39,7 @@ export default {
       console.log(item);
     },
     deleteItem(item) {
-      if (!this.solicitacao) this.$emit("delete-inst", item);
+      this.$emit("delete", item);
       console.log(item);
     },
   },

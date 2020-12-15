@@ -88,10 +88,10 @@ module.exports = {
     request.body.instituicao.mantenedora = "teste";
     let diretor = request.body.diretor;
     request.body.diretor.cargo = "DIRE";
-    request.body.diretor.senha = "padrao";
+    request.body.diretor.senha = "password";
     let dirigente = request.body.dirigente;
     request.body.dirigente.cargo = "DIRI";
-    request.body.dirigente.senha = "padrao";
+    request.body.dirigente.senha = "password";
     module.exports
       .create(request.body.instituicao)
       .then((id_instituicao) => {
@@ -140,13 +140,15 @@ module.exports = {
       where: {
         status: params.status,
       },
-    })
-      .then((result) => {
-        console.log(result);
-        if (Object.keys(result).length !== 0)
-          return response.json({ data: result });
-        else return response.status(404).json({ data: "Não há faculdades com esse status" });
-      })
+    }).then((result) => {
+      console.log(result);
+      if (Object.keys(result).length !== 0)
+        return response.json({ data: result });
+      else
+        return response
+          .status(404)
+          .json({ data: "Não há faculdades com esse status" });
+    });
   },
 
   editar(request, response) {
@@ -174,6 +176,14 @@ module.exports = {
         .then(() => {
           return response.json({ info: "success", data: instituicao });
         });
+    });
+  },
+  deleteInstituicao(request, response) {
+    console.log(request);
+    return Instituicao.destroy({
+      where: { nome_instituicao: request.body.nome_instituicao },
+    }).then(() => {
+      return response.json({ data: "success" });
     });
   },
 };

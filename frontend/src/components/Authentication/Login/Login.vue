@@ -1,46 +1,72 @@
 <template>
-  <v-card class="form-card d-flex justify-center" elevation="4" text>
-    <v-form class="form mt-8" @submit.prevent="handleSubmit">
-      <div class="">
-        <img
-          class="text-center"
-          src="../../../assets/logo.png"
-          alt="Company logo"
-        />
-        <h1 class="blue-grey--text mb-8 text-center">Login</h1>
-        <v-text-field
-          v-model="user"
-          label="Usuário"
-          class="inputField"
-        ></v-text-field>
-        <v-text-field
-          v-model="password"
-          label="Senha"
-          :append-icon="!showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="() => (showPassword = !showPassword)"
-          :type="showPassword ? 'password' : 'text'"
-          class="inputField"
-        ></v-text-field>
-      </div>
-      <p class="error--text" v-if="errorLogin == 0">
-        Sua instituição ainda possui cadastro pendente
-      </p>
-      <p class="error--text" v-if="errorLogin == 1">
-        Usuário ou senha inválidos
-      </p>
-      <div class="d-flex justify-space-between flex-column align-center mt-8">
-        <v-btn
-          color="success mb-2"
-          :disabled="!minLenght"
-          type="submit"
-          width="200px"
-          :loading="loading"
-          >LOGIN</v-btn
-        >
-        <router-link to="/home"> Esqueceu a senha ?</router-link>
-      </div>
-    </v-form>
-  </v-card>
+  <div>
+    <v-row justify="center">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          Esqueceu a senha ?
+        </v-card-title>
+        <v-card-text>Contate o administrador do sistema para resetar a senha</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+    <v-card class="form-card d-flex justify-center" elevation="4" text>
+      <v-form class="form mt-8" @submit.prevent="handleSubmit">
+        <div class="">
+          <img
+            class="text-center"
+            src="../../../assets/logo.png"
+            alt="Company logo"
+          />
+          <h1 class="blue-grey--text mb-8 text-center">Login</h1>
+          <v-text-field
+            v-model="user"
+            label="Usuário"
+            class="inputField"
+          ></v-text-field>
+          <v-text-field
+            v-model="password"
+            label="Senha"
+            :append-icon="!showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="() => (showPassword = !showPassword)"
+            :type="showPassword ? 'password' : 'text'"
+            class="inputField"
+          ></v-text-field>
+        </div>
+        <p class="error--text" v-if="errorLogin == 0">
+          Sua instituição ainda possui cadastro pendente
+        </p>
+        <p class="error--text" v-if="errorLogin == 1">
+          Usuário ou senha inválidos
+        </p>
+        <div class="d-flex justify-space-between flex-column align-center mt-8">
+          <v-btn
+            color="success mb-2"
+            :disabled="!minLenght"
+            type="submit"
+            width="200px"
+            :loading="loading"
+            >LOGIN</v-btn
+          >
+          <v-btn @click="dialog = true" class="mt-2"> Esqueceu a senha ?</v-btn>
+        </div>
+      </v-form>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -52,6 +78,7 @@ export default {
     if (localStorage.nome != null) this.$router.push("home");
   },
   data: () => ({
+    dialog: false,
     loading: false,
     errorLogin: null,
     user: "",
@@ -73,7 +100,8 @@ export default {
       Api.post("login", data)
         .then((response) => {
           console.log(response);
-          if (response.data.code) {
+          if (response.data.code == 0) {
+            console.log("asd");
             this.errorLogin = response.data.code;
           } else {
             localStorage.email = response.data.usuario;

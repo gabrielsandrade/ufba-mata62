@@ -21,8 +21,6 @@
                   <v-text-field
                     label="Nome do curso"
                     v-model="curso.nome_curso"
-                    :rules="nomeRules"
-                    @keyup="nomeEmUso = false"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="6">
@@ -91,7 +89,12 @@
       </v-dialog>
     </v-row>
     <div class="list-cursos mx-2 px-8">
-      <DataTable :items="cursos" :headers="headers" />
+      <DataTable
+        :items="cursos"
+        :headers="headers"
+        v-on:editar="editCourse"
+        v-on:delete="deleteCourse"
+      />
     </div>
   </div>
 </template>
@@ -106,6 +109,7 @@ export default {
   },
   data: () => {
     return {
+      editing: false,
       dialog: false,
       user: localStorage.nome,
       logged: null,
@@ -130,11 +134,32 @@ export default {
         { text: "Reconhecimento", value: "reconhecimento" },
         { text: "Data de reconhecimento", value: "reconhecimento_data" },
         { text: "Observacao", value: "observacao" },
+        { text: "Ações", value: "actions" },
       ],
       cursos: [],
     };
   },
   methods: {
+    editCourse(element) {
+      console.log(element);
+      this.curso.nome_curso = element.nome_curso;
+      this.curso.grau = element.grau;
+      this.curso.codigo_mec = element.codigo_mec;
+      this.curso.id_curso = element.id_curso;
+      this.curso.id_instituicao = element.id_instituicao;
+      this.curso.publicacao = element.publicacao;
+      this.curso.publicacao_data = element.publicacao_data;
+      this.curso.reconhecimento = element.reconhecimento;
+      this.curso.reconhecimento_data = element.reconhecimento_data;
+      this.curso.observacao = element.observacao;
+      this.editing = true;
+      this.dialog = true;
+    },
+    deleteCourse(item) {
+      Api.post("curso/delete", { id_curso: item.id_curso }).then(() =>
+        this.getCourses()
+      );
+    },
     getCourses() {
       Api.get("curso").then((response) => {
         console.log(response);
@@ -156,16 +181,20 @@ export default {
       });
     },
     salvar() {
-      Api.post("curso", {
-        nome_curso: this.curso.nome_curso,
-        grau: this.curso.grau,
-        codigo_mec: this.curso.codigo_mec,
-        publicacao: this.curso.publicacao,
-        publicacao_data: this.curso.publicacao_data,
-        reconhecimento: this.curso.reconhecimento,
-        reconhecimento_data: this.curso.reconhecimento_data,
-        observacao: this.curso.observacao,
-      }).then(() => this.reset());
+      if (!this.editing) {
+        Api.post("curso", {
+          nome_curso: this.curso.nome_curso,
+          grau: this.curso.grau,
+          codigo_mec: this.curso.codigo_mec,
+          publicacao: this.curso.publicacao,
+          publicacao_data: this.curso.publicacao_data,
+          reconhecimento: this.curso.reconhecimento,
+          reconhecimento_data: this.curso.reconhecimento_data,
+          observacao: this.curso.observacao,
+        }).then(() => this.reset());
+      } else {
+        Api.post("curso/edit", this.curso).then(() => this.reset());
+      }
     },
     reset() {
       this.curso.nome_curso = null;
@@ -177,6 +206,7 @@ export default {
       this.curso.reconhecimento_data = null;
       this.curso.observacao = null;
       this.dialog = false;
+      this.editing = false;
     },
   },
 

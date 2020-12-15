@@ -39,6 +39,7 @@
           min-width="250px"
           hover
           class="my-4"
+          v-if="canSeeFunc"
         >
           <v-icon>mdi-account-multiple</v-icon>
           <v-card-title>Funcionários</v-card-title>
@@ -56,6 +57,10 @@
           <v-icon>mdi-account-multiple</v-icon>
           <v-card-title>Solicitações</v-card-title>
         </v-card>
+        <v-card exact height="250px" min-width="250px" hover class="my-4" v-if="canValidate">
+          <v-icon>mdi-book</v-icon>
+          <v-card-title>Validar diploma</v-card-title>
+        </v-card>
       </div>
     </div>
   </div>
@@ -70,16 +75,22 @@ export default {
   },
   computed: {
     canSeeInst() {
-      return consts.CAN_SEE_INST.includes(localStorage.cargo);
+      return consts.CAN_GET_EDIT_INST.includes(localStorage.cargo);
     },
     canSeeCourses() {
-      return consts.CAN_SEE_COURSES.includes(localStorage.cargo);
+      return consts.CAN_MANAGE_COURSES.includes(localStorage.cargo);
     },
     canSeeSolicitations() {
-      return consts.CAN_SEE_SOLICITATIONS.includes(localStorage.cargo);
+      return consts.CAN_GET_SOLICITATIONS.includes(localStorage.cargo);
     },
     isValidadora() {
       return localStorage.validadora;
+    },
+    canSeeFunc() {
+      return consts.CAN_MANAGE_USERS.includes(localStorage.cargo);
+    },
+    canValidate(){
+      return localStorage.cargo == "COL";
     },
   },
 };

@@ -7,6 +7,7 @@
         :loading="loading"
         solicitacao="true"
         v-on:accept="accept"
+        v-on:delete="deleteInst"
       />
     </div>
   </div>
@@ -45,6 +46,7 @@ export default {
 
   created() {
     this.loading = true;
+    this.headers[this.headers.length - 1].show = this.isSuperintendente;
     Api.post("/instituicao", { status: "pendente" })
       .then((response) => {
         response.data.data.forEach((instituicao) => {
@@ -77,6 +79,9 @@ export default {
     },
   },
   methods: {
+    deleteInst(item) {
+      console.log(item);
+    },
     accept(instituicao) {
       instituicao.status = "Ativa";
       console.log(instituicao);

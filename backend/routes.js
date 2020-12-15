@@ -35,15 +35,18 @@ routes.post("/instituicao", CollegeController.returnByStatus);
 routes.get("/instituicao", CollegeController.get);
 routes.post("/instituicao", CollegeController.cadastro);
 routes.post("/instituicao/edit", CollegeController.editar);
+routes.post("/instituicao/delete", CollegeController.deleteInstituicao);
 
 routes.get("/user", UserController.getFuncionarios);
-routes.delete("/user", UserController.deleteFuncionarios);
+routes.post("/user/delete", UserController.deleteFuncionarios);
 routes.post("/user", UserController.createUser);
 
 //routes.post("/user/check", UserController.checkCpf);
 
 routes.get("/curso", CourseController.get);
 routes.post("/curso", CourseController.createCurso);
+routes.post("/curso/edit", CourseController.edit);
+routes.post("/curso/delete", CourseController.deleteCurso);
 
 routes.post("/user/edit", UserController.editar);
 routes.post("/user/check", UserController.checkName);
