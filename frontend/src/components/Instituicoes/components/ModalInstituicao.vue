@@ -178,7 +178,10 @@ export default {
   },
   methods: {
     edit(instituicao) {
-      AuthenticationServices.editarInstituicao(instituicao).then(() => this.reset());
+      AuthenticationServices.editarInstituicao(instituicao).then(() => {
+        this.reset();
+        this.$emit("edited");
+      });
     },
     reset() {
       this.instituicao.nome_instituicao = null;

@@ -29,7 +29,7 @@
             v-if="isValidadora && canSeeInst"
             >Instituições
           </v-list-item>
-          <v-list-item exact to="/home/usuarios" v-if="canSeeUsers"
+          <v-list-item exact to="/home/usuarios" v-if="canSeeFunc"
             >Funcionários</v-list-item
           >
           <v-list-item exact to="/home/cursos" v-if="isValidadora"
@@ -81,8 +81,8 @@ export default {
     },
   },
   computed: {
-    canSeeUsers() {
-      return true;
+    canSeeFunc() {
+      return consts.CAN_MANAGE_USERS.includes(localStorage.cargo);
     },
     canSeeInst() {
       return consts.CAN_GET_EDIT_INST.includes(localStorage.cargo);

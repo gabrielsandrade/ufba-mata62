@@ -81,7 +81,12 @@
             <v-btn color="blue darken-1" text @click="reset">
               Fechar
             </v-btn>
-            <v-btn color="blue darken-1" text @click="salvar">
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="salvar"
+              :loading="loading"
+            >
               Salvar
             </v-btn>
           </v-card-actions>
@@ -109,6 +114,7 @@ export default {
   },
   data: () => {
     return {
+      loading: false,
       editing: false,
       dialog: false,
       user: localStorage.nome,
@@ -156,9 +162,10 @@ export default {
       this.dialog = true;
     },
     deleteCourse(item) {
-      Api.post("curso/delete", { id_curso: item.id_curso }).then(() =>
-        this.getCourses()
-      );
+      Api.post("curso/delete", { id_curso: item.id_curso }).then(() => {
+        this.cursos = [];
+        this.getCourses();
+      });
     },
     getCourses() {
       Api.get("curso").then((response) => {
@@ -181,6 +188,7 @@ export default {
       });
     },
     salvar() {
+      this.loading = true;
       if (!this.editing) {
         Api.post("curso", {
           nome_curso: this.curso.nome_curso,
@@ -191,9 +199,17 @@ export default {
           reconhecimento: this.curso.reconhecimento,
           reconhecimento_data: this.curso.reconhecimento_data,
           observacao: this.curso.observacao,
-        }).then(() => this.reset());
+        }).then(() => {
+          this.reset();
+          this.cursos = [];
+          this.getCourses();
+        });
       } else {
-        Api.post("curso/edit", this.curso).then(() => this.reset());
+        Api.post("curso/edit", this.curso).then(() => {
+          this.reset();
+          this.cursos = [];
+          this.getCourses();
+        });
       }
     },
     reset() {
@@ -207,6 +223,7 @@ export default {
       this.curso.observacao = null;
       this.dialog = false;
       this.editing = false;
+      this.loading = false;
     },
   },
 

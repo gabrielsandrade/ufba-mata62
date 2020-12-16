@@ -1,7 +1,11 @@
 <template>
   <div class="main">
     <div class="list-cursos mx-2 px-8">
-      <ModalInstituicao ref="modalInst" v-if="isSuperintendente" />
+      <ModalInstituicao
+        ref="modalInst"
+        v-if="isSuperintendente"
+        v-on:edited="getInsts"
+      />
       <ModalUsuario />
       <DataTable
         :items="instituicoes"
@@ -62,6 +66,7 @@ export default {
   },
   methods: {
     getInsts() {
+      this.instituicoes = [];
       Api.post("/instituicao", { status: "Ativa" })
         .then((response) => {
           response.data.data.forEach((instituicao) => {
